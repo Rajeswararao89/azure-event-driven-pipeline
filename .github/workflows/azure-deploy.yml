@@ -44,13 +44,16 @@ jobs:
           AZURE_FUNCTIONAPP_NAME_INGEST: ${{ secrets.AZURE_FUNCTIONAPP_NAME_INGEST }}
           AZURE_FUNCTIONAPP_NAME_REPORT: ${{ secrets.AZURE_FUNCTIONAPP_NAME_REPORT }}
         run: |
+          echo "Deploying ingest function..."
           az functionapp deployment source config-zip \
           --name $AZURE_FUNCTIONAPP_NAME_INGEST \
           --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
-          --src ingest_function.zip
+          --src ./ingest_function.zip
 
+          echo "Deploying report function..."
           az functionapp deployment source config-zip \
           --name $AZURE_FUNCTIONAPP_NAME_REPORT \
           --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
-          --src report_function.zip
+          --src ./report_function.zip
+
 
