@@ -8,9 +8,9 @@ output "storage_account" {
 }
 
 output "ingest_function_name" {
-  value = azurerm_function_app.ingest.name
+  value = azurerm_linux_function_app.ingest.name
 }
 
 output "report_function_name" {
-  value = azurerm_function_app.report.name
+  value = azurerm_linux_function_app.report.name
 }
