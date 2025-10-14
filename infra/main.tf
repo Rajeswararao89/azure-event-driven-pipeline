@@ -1,19 +1,4 @@
-########################################
-# Azure Event-Driven Data Pipeline Infra
-########################################
 
-terraform {
-  required_providers {
-    azurerm = {
-      source  = "hashicorp/azurerm"
-      version = "~> 3.100"
-    }
-  }
-}
-
-provider "azurerm" {
-  features {}
-}
 
 # Resource Group
 resource "azurerm_resource_group" "rg" {
