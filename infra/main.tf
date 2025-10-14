@@ -8,7 +8,7 @@ resource "azurerm_resource_group" "rg" {
 
 # Storage Account
 resource "azurerm_storage_account" "storage" {
-  name                     = lower(replace("${var.project_name}stg", "_", ""))
+  name = lower(replace(replace("${var.project_name}stg", "_", ""), "-", ""))
   resource_group_name      = azurerm_resource_group.rg.name
   location                 = var.location
   account_tier             = "Standard"
