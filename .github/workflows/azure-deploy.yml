@@ -35,8 +35,9 @@ jobs:
 
       - name: Package Functions
         run: |
-          chmod +x ./build_functions.sh
+          chmod +x build_functions.sh
           ./build_functions.sh
+
 
       - name: Deploy Functions (zip deploy)
         env:
