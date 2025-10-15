@@ -1,0 +1,48 @@
+1) Azure Event Grid with Blob Storage and Function Apps
+Link: https://learn.microsoft.com/en-us/azure/event-grid/overview
+Overview: Demonstrates how Event Grid routes Blob-created events from Storage Accounts to Azure Functions for immediate, serverless processing.
+Key Technologies: Azure Blob Storage, Event Grid, Function Apps, Managed Identity, Application Insights.
+Triggering Mechanism: “Blob Created” event emitted by Storage Account triggers the Function App through Event Grid.
+Processing Flow: File upload → Event Grid → Function → Transform data → Write to processed container.
+Automation & Deployment: IaC via Terraform (AzureRM provider) + GitHub Actions for CI/CD.
+
+2) Serverless Data Processing Pipeline with Azure Functions and Event Hub
+Link: https://learn.microsoft.com/en-us/azure/architecture/example-scenario/serverless/serverless-event-processing
+Overview: Real-time processing of streaming data using Event Hubs and Function Apps to store and transform data in Blob Storage for analytics.
+Key Technologies: Event Hubs, Azure Functions, Blob Storage, Cosmos DB, Monitor.
+Triggering Mechanism: Stream event arrives in Event Hub → triggers Function via Event Hub Trigger.
+Processing Flow: Event → Function transform → Blob/Cosmos storage → Analytics services.
+Automation & Deployment: Terraform creates Event Hub, Function App, and Storage; GitHub Actions deploys code continuously.
+
+3) Automating ETL Workflows with Azure Data Factory and Functions
+Link: https://learn.microsoft.com/en-us/azure/data-factory/how-to-create-schedule-trigger
+Overview: Uses Azure Data Factory for orchestration and Functions for custom transformations to build automated ETL flows.
+Key Technologies: Data Factory, Azure Functions, Blob Storage, SQL Database.
+Triggering Mechanism: Scheduled triggers in Data Factory or Event Grid events.
+Processing Flow: Trigger → ADF pipeline runs Functions for transform → output to Blob / SQL → reports.
+Automation & Deployment: Terraform manages ADF pipelines and linked services; CI/CD via Azure DevOps or GitHub Actions.
+
+4) Daily Reporting System using Timer Triggers and Blob Storage
+Link: https://learn.microsoft.com/en-us/azure/azure-functions/functions-bindings-timer
+Overview: A Timer-triggered Function runs daily to aggregate data in Blob Storage and produce summary reports.
+Key Technologies: Azure Functions (timer trigger), Blob Storage, SendGrid/Logic Apps for email.
+Triggering Mechanism: Cron-style schedule defined in function.json invokes the Function daily.
+Processing Flow: Function runs → scan Blob container → aggregate data → store CSV report → email link.
+Automation & Deployment: Terraform creates Function App and Timer bindings; GitHub Actions deploys zip packages.
+
+5) Infrastructure Automation for Event-Driven Systems on Azure
+Link: https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs
+Overview: Showcases how Terraform provisions Function Apps, Storage Accounts, and Event Grid subscriptions in one deployment.
+Key Technologies: Terraform AzureRM provider, Azure Resource Groups, Managed Identity.
+Triggering Mechanism: Resource creation automatically configures event routes.
+Processing Flow: Developer changes → CI/CD → Terraform Apply → Deployed infra → Event Grid routes data.
+Automation & Deployment: Continuous integration pipeline using GitHub Actions or Azure Pipelines.
+
+6) CI/CD for Azure Functions with GitHub Actions
+Link: https://learn.microsoft.com/en-us/azure/azure-functions/functions-how-to-github-actions
+Overview: Demonstrates automating build & deploy of Function Apps to Azure through GitHub Actions.
+Key Technologies: GitHub Actions, Azure Function App, Service Principal Auth.
+Triggering Mechanism: Push to main branch → Workflow runs → Deploy to Function App.
+Processing Flow: Checkout code → Setup Python/.NET → Zip deploy to Function App.
+Automation & Deployment: Terraform provisions infra; Actions automate CI/CD.
+
