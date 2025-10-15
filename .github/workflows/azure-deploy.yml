@@ -1,9 +1,7 @@
 name: Azure Deploy - Terraform & Functions
-
 on:
   push:
     branches: [ 'main' ]
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
