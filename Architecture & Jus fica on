@@ -1,0 +1,57 @@
+ This document provides a comprehensive architectural overview and design justification for an event-driven
+ data processing pipeline built on Microsoft Azure. The solution leverages serverless computing, event routing,
+ and automated infrastructure management to enable continuous data ingestion, transformation, and daily
+ report generation. By adopting Infrastructure as Code (IaC) and CI/CD practices, the system ensures agility,
+ scalability, and operational consistency across deployments.
+ 1. High-Level Architecture Overview
+ The architecture is based on an event-driven and serverless design using core Azure components. Data files
+ are uploaded by users or systems into a dedicated Azure Blob Storage “raw” container. Upon upload, Azure
+ Event Grid automatically triggers an Ingest Function App that processes and transforms the data, saving
+ cleaned output into a “processed” container. A separate Report Function App runs daily (using a Timer
+ Trigger) to aggregate processed data and generate daily summary reports stored in a “reports” container.
+ Infrastructure provisioning is automated through Terraform, while GitHub Actions ensures continuous
+ integration and deployment of both infrastructure and code updates.
+ 2. Design Justification
+ The decision to use Azure’s serverless ecosystem is grounded in scalability, cost efficiency, and
+ maintainability. Azure Blob Storage was chosen as the central storage system because of its high durability
+ and integration with Event Grid. Event Grid enables near real-time notifications without the need for constant
+ polling. Azure Functions eliminate the need for server provisioning and scale automatically according to
+ workload. Timer Triggers provide reliable scheduling for recurring jobs, making them ideal for daily reporting
+ tasks. Terraform ensures reproducibility and infrastructure consistency across environments, while GitHub
+ Actions automates deployment pipelines to reduce manual errors.
+ 3. Automation & Deployment Flow
+ The system’s automation pipeline is designed to handle code and infrastructure updates seamlessly.
+ Developers push changes to a GitHub repository that includes both Terraform definitions and Azure Function
+ code. A GitHub Actions workflow runs automatically, authenticating with Azure using a Service Principal and
+ executing Terraform commands (“init”, “plan”, and “apply”) to provision or update resources. Function Apps
+ are packaged, validated, and deployed using the same CI/CD process. This approach provides a zero-touch
+ deployment mechanism where all updates pass through version control and automated validation steps
+ before production rollout.
+ 4. Reporting Process
+ The reporting layer of this architecture automates the generation of daily data summaries. The Report
+ Function App, triggered via a Timer Trigger, connects to the processed container, lists all available data files,
+ extracts metadata such as filename, size, and timestamp, and aggregates these into a structured CSV report.
+ The report is then uploaded to the “reports” container within Blob Storage. Optional extensions include
+ integrating Azure Logic Apps or SendGrid to email the generated reports automatically to stakeholders,
+ ensuring timely insights without human intervention.
+5. Fault Tolerance & Scalability
+ The entire system is designed with scalability and reliability as core principles. Azure Blob Storage
+ guarantees high availability and data durability with multiple redundancies. Event Grid offers built-in retry
+ mechanisms and supports dead-letter queues for event recovery. Azure Functions scale dynamically with
+ demand, allowing the system to process high volumes of events efficiently. To enhance performance,
+ processed data can be partitioned by date or category, and report generation can be optimized using parallel
+ executions. Monitoring and logging are handled by Azure Application Insights, which provides metrics, traces,
+ and alerting for operational visibility.
+ 6. Security Considerations
+ Security in this architecture follows Azure’s best practices and the principle of least privilege. Function Apps
+ use Managed Identities to authenticate securely to Blob Storage without embedded credentials. Access
+ Control Lists (ACLs) and Role-Based Access Control (RBAC) are applied to restrict access to storage and
+ compute resources. Sensitive information such as API keys or connection strings are stored in Azure Key
+ Vault, ensuring encryption at rest and in transit. Additionally, all activity is logged through Azure Monitor and
+ Azure Activity Logs, supporting compliance and audit requirements.
+ 7. Conclusion
+ The Azure-based event-driven data pipeline described here achieves full automation, resilience, and
+ scalability while minimizing operational overhead. By leveraging serverless components, event-driven
+ triggers, and IaC-driven deployment, it fulfills the assignment’s objectives of automated data processing, daily
+ reporting, and DevOps integration. This solution demonstrates industry-standard architectural practices
+ suitable for modern cloud engineering environments
