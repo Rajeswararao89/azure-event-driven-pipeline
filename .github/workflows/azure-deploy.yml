@@ -1,4 +1,3 @@
-
 name: Azure Deploy - Terraform & Functions
 
 on:
@@ -35,25 +34,27 @@ jobs:
 
       - name: Package Functions
         run: |
+          echo "Packaging Azure Functions..."
           chmod +x build_functions.sh
           ./build_functions.sh
-
+          echo "Listing packaged files:"
+          ls -al
 
       - name: Deploy Functions (zip deploy)
         env:
           AZURE_FUNCTIONAPP_NAME_INGEST: ${{ secrets.AZURE_FUNCTIONAPP_NAME_INGEST }}
           AZURE_FUNCTIONAPP_NAME_REPORT: ${{ secrets.AZURE_FUNCTIONAPP_NAME_REPORT }}
+          AZURE_RESOURCE_GROUP: ${{ secrets.AZURE_RESOURCE_GROUP }}
         run: |
           echo "Deploying ingest function..."
+          ls -al ./  # Verify zip files exist
           az functionapp deployment source config-zip \
-          --name $AZURE_FUNCTIONAPP_NAME_INGEST \
-          --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
-          --src ./ingest_function.zip
+            --name $AZURE_FUNCTIONAPP_NAME_INGEST \
+            --resource-group $AZURE_RESOURCE_GROUP \
+            --src "$GITHUB_WORKSPACE/ingest_function.zip"
 
           echo "Deploying report function..."
           az functionapp deployment source config-zip \
-          --name $AZURE_FUNCTIONAPP_NAME_REPORT \
-          --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
-          --src ./report_function.zip
-
-
+            --name $AZURE_FUNCTIONAPP_NAME_REPORT \
+            --resource-group $AZURE_RESOURCE_GROUP \
+            --src "$GITHUB_WORKSPACE/report_function.zip"
